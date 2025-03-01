@@ -43,7 +43,7 @@ android {
         }
     }
 
-    ndkVersion = "23.1.7779620"
+    ndkVersion = "28.0.13004108"
 }
 
 dependencies {
@@ -53,15 +53,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.rules)
-}
-
-// This pulls in freetype. Dependencies are in cdep.yml
-// This only needs to run once but is being run before every build right now so that gradle command line builds will work
-
-tasks.register<Exec>("runcdep") {
-    commandLine("./cdep")
-}
-
-tasks.preBuild {
-    dependsOn("runcdep")
 }
