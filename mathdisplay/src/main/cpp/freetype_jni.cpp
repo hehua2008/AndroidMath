@@ -10,6 +10,10 @@
 /* Please compile with Release Multithreaded */
 /* And do not compile with 32 bits after year 2038 ;) */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- Helper functions --- */
 /* fuck up */
 
@@ -581,3 +585,7 @@ Java_com_pvporbit_freetype_FreeType_FT_1Face_1Get_1Kerning(JNIEnv *env, jclass o
     jobject a = env->NewObject(cls, methodID, x, y);
     return a;
 }
+
+#ifdef __cplusplus
+}
+#endif

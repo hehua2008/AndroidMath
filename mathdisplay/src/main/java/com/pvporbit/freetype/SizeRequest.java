@@ -5,10 +5,10 @@ import com.pvporbit.freetype.FreeTypeConstants.FT_Size_Request_Type;
 public class SizeRequest {
 
     private int type;
-    private int width, height;
+    private long width, height;
     private int horiResolution, vertResolution;
 
-    public SizeRequest(FT_Size_Request_Type type, int width, int height, int horiResolution, int vertResolution) {
+    public SizeRequest(FT_Size_Request_Type type, long width, long height, int horiResolution, int vertResolution) {
         this.type = type.ordinal();
         this.width = width;
         this.height = height;
@@ -20,11 +20,11 @@ public class SizeRequest {
         return FT_Size_Request_Type.values()[type];
     }
 
-    public int getWidth() {
+    public long getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    public long getHeight() {
         return height;
     }
 
