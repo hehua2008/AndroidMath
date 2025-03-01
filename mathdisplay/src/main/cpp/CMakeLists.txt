@@ -12,7 +12,6 @@ add_library( # Sets the name of the library.
              freetype_jni.cpp
              )
 
-find_package(cdep-dependencies REQUIRED)
-add_all_cdep_dependencies(freetype-jni)
+target_include_directories(freetype-jni PUBLIC "freetype/include")
 
-target_link_libraries(freetype-jni log android)
+target_link_libraries(freetype-jni ${CMAKE_SOURCE_DIR}/libfreetype.a log android)

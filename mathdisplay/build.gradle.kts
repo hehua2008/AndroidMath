@@ -13,13 +13,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        externalNativeBuild {
-            cmake {
-                arguments += "-Dcdep-dependencies_DIR=../../../.cdep/modules"
-                arguments += "-DANDROID_STL=c++_shared"
-            }
-        }
     }
 
     buildTypes {
@@ -52,15 +45,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.rules)
-}
-
-// This pulls in freetype. Dependencies are in cdep.yml
-// This only needs to run once but is being run before every build right now so that gradle command line builds will work
-
-tasks.register<Exec>("runcdep") {
-    commandLine("./cdep")
-}
-
-tasks.preBuild {
-    dependsOn("runcdep")
 }
