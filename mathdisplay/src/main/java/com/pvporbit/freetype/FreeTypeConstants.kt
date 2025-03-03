@@ -43,31 +43,4 @@ object FreeTypeConstants {
     const val FT_ENCODING_ADOBE_LATIN_1: Int = 1818326065 // l a t 1
     const val FT_ENCODING_OLD_LATIN_2: Int = 1818326066 // l a t 2
     const val FT_ENCODING_APPLE_ROMAN: Int = 1634889070 // a r m n
-
-    enum class FT_Render_Mode {
-        FT_RENDER_MODE_NORMAL,
-        FT_RENDER_MODE_LIGHT,
-        FT_RENDER_MODE_MONO,
-        FT_RENDER_MODE_LCD,
-        FT_RENDER_MODE_LCD_V,
-
-        FT_RENDER_MODE_MAX
-    }
-
-    enum class FT_Size_Request_Type {
-        FT_SIZE_REQUEST_TYPE_NOMINAL,
-        FT_SIZE_REQUEST_TYPE_REAL_DIM,
-        FT_SIZE_REQUEST_TYPE_BBOX,
-        FT_SIZE_REQUEST_TYPE_CELL,
-        FT_SIZE_REQUEST_TYPE_SCALES,
-
-        FT_SIZE_REQUEST_TYPE_MAX
-    }
-
-
-    enum class FT_Kerning_Mode {
-        FT_KERNING_DEFAULT,
-        FT_KERNING_UNFITTED,
-        FT_KERNING_UNSCALED
-    }
 }

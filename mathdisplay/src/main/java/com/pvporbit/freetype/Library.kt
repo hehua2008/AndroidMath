@@ -23,19 +23,19 @@ class Library(pointer: Long) : NativeWrapper(pointer) {
         try {
             return newFace(Utils.loadFileToByteArray(file), faceIndex)
         } catch (e: IOException) {
+            return null
         }
-        return null
     }
 
     /**
      * Create a new Face object from a byte[]<br></br>
      * It will return null in case of error.
      */
-    fun newFace(file: ByteArray, faceIndex: Int): Face? {
-        val buffer = Utils.newBuffer(file.size)
+    fun newFace(bytes: ByteArray, faceIndex: Int): Face? {
+        val buffer = Utils.newBuffer(bytes.size)
         buffer!!.order(ByteOrder.nativeOrder())
-        buffer.limit(buffer.position() + file.size)
-        Utils.fillBuffer(file, buffer, file.size)
+        buffer.limit(buffer.position() + bytes.size)
+        Utils.fillBuffer(bytes, buffer, bytes.size)
         return newFace(buffer, faceIndex)
     }
 
@@ -44,16 +44,16 @@ class Library(pointer: Long) : NativeWrapper(pointer) {
      * It will return null in case of error.<br></br>
      * Take care that the ByteByffer must be a direct buffer created with Utils.newBuffer and filled with Utils.fillBuffer.
      */
-    fun newFace(file: ByteBuffer, faceIndex: Int): Face? {
-        val face = FreeType.FT_New_Memory_Face(pointer, file, file.remaining(), faceIndex.toLong())
+    fun newFace(buffer: ByteBuffer, faceIndex: Int): Face? {
+        val face = FreeType.FT_New_Memory_Face(pointer, buffer, buffer.remaining(), faceIndex.toLong())
         if (face == 0L) {
-            Utils.deleteBuffer(file)
+            Utils.deleteBuffer(buffer)
             return null
         }
-        return Face(face, file)
+        return Face(face, buffer)
     }
 
-    val version: LibraryVersion?
+    val version: LibraryVersion
         /**
          * Returns a LibraryVersion object containing the information about the version of FreeType
          */

@@ -9,7 +9,7 @@ object FreeType {
     // ---- Library
     external fun FT_Done_FreeType(library: Long): Boolean
 
-    external fun FT_Library_Version(library: Long): LibraryVersion? // [major, minor, patch]
+    external fun FT_Library_Version(library: Long): LibraryVersion // [major, minor, patch]
 
     //	public static native long           FT_Open_Face(long library, FT_Open_Args args, long faceIndex); // Nope.
     //	public static native long           FT_New_Face(long library, String filepathname, long faceIndex); // Please use 'FT_New_Memory_Face' or preferable 'library.newFace(path)'

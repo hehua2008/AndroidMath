@@ -1,6 +1,5 @@
 package com.pvporbit.freetype
 
-import com.pvporbit.freetype.FreeTypeConstants.FT_Kerning_Mode
 import java.nio.ByteBuffer
 
 /**
@@ -99,10 +98,10 @@ class Face : NativeWrapper {
     }
 
     fun getKerning(left: Char, right: Char): Kerning? {
-        return getKerning(left, right, FT_Kerning_Mode.FT_KERNING_DEFAULT)
+        return getKerning(left, right, KerningMode.FT_KERNING_DEFAULT)
     }
 
-    fun getKerning(left: Char, right: Char, mode: FT_Kerning_Mode): Kerning? {
+    fun getKerning(left: Char, right: Char, mode: KerningMode): Kerning? {
         val ptr = FreeType.FT_Face_Get_Kerning(pointer, left, right, mode.ordinal)
         return if (ptr == 0L) null else Vector(ptr).let { Kerning(it.x, it.y) }
     }
@@ -137,7 +136,7 @@ class Face : NativeWrapper {
         return FreeType.FT_Reference_Face(pointer)
     }
 
-    fun requestSize(sr: SizeRequest?): Boolean {
+    fun requestSize(sr: SizeRequest): Boolean {
         return FreeType.FT_Request_Size(pointer, sr)
     }
 

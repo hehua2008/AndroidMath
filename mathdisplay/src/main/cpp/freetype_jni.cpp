@@ -589,13 +589,10 @@ Java_com_pvporbit_freetype_FreeType_FT_1Request_1Size(JNIEnv *env, jclass obj, j
     FT_Size_RequestRec req = {};
     req.height = env->GetLongField(sizeRequest, env->GetFieldID(sizeRequestClass, "height", "J"));
     req.width = env->GetLongField(sizeRequest, env->GetFieldID(sizeRequestClass, "width", "J"));
-    req.horiResolution = env->GetIntField(sizeRequest,
-                                          env->GetFieldID(sizeRequestClass, "horiResolution", "I"));
-    req.vertResolution = env->GetIntField(sizeRequest,
-                                          env->GetFieldID(sizeRequestClass, "vertResolution", "I"));
-    req.type = (FT_Size_Request_Type) (env->GetIntField(sizeRequest,
-                                                        env->GetFieldID(sizeRequestClass, "type",
-                                                                        "I")));
+    req.horiResolution = env->GetIntField(sizeRequest, env->GetFieldID(sizeRequestClass, "horiResolution", "I"));
+    req.vertResolution = env->GetIntField(sizeRequest, env->GetFieldID(sizeRequestClass, "vertResolution", "I"));
+    jmethodID getTypeIntMethod = env->GetMethodID(sizeRequestClass, "getTypeInt", "()I");
+    req.type = (FT_Size_Request_Type) env->CallIntMethod(sizeRequest, getTypeIntMethod);
 
     return FT_Request_Size((FT_Face) face, (FT_Size_Request) &req);
 }
