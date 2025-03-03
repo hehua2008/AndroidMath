@@ -1,42 +1,30 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.nio.ByteBuffer
 
-public class Utils {
-
-    public static class Pointer {
-        protected long pointer;
-
-        public Pointer(long pointer) {
-            this.pointer = pointer;
-        }
-
-        public long getPointer() {
-            return pointer;
-        }
-    }
-
-    public static byte[] loadFileToByteArray(String filepath) throws IOException, FileNotFoundException {
-        File file = new File(filepath);
-        int size = (int) file.length();
-        byte[] bytes = new byte[size];
-        BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-        buf.read(bytes, 0, bytes.length);
-        buf.close();
-        return bytes;
+object Utils {
+    @Throws(IOException::class, FileNotFoundException::class)
+    fun loadFileToByteArray(filepath: String): ByteArray {
+        val file = File(filepath)
+        val size = file.length().toInt()
+        val bytes = ByteArray(size)
+        val buf = BufferedInputStream(FileInputStream(file))
+        buf.read(bytes, 0, bytes.size)
+        buf.close()
+        return bytes
     }
 
     /* Buffer helpers */
+    external fun newBuffer(size: Int): ByteBuffer?
 
-    public static native ByteBuffer newBuffer(int size);
+    external fun fillBuffer(bytes: ByteArray?, buffer: ByteBuffer?, length: Int)
 
-    public static native void fillBuffer(byte[] bytes, ByteBuffer buffer, int length);
+    external fun deleteBuffer(buffer: ByteBuffer?)
 
-    public static native void deleteBuffer(ByteBuffer buffer);
-
+    open class Pointer(var pointer: Long)
 }

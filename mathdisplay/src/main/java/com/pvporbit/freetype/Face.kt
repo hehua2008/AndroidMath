@@ -1,208 +1,181 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.FreeTypeConstants.FT_Kerning_Mode;
-import com.pvporbit.freetype.Utils.Pointer;
-
-import java.nio.ByteBuffer;
+import com.pvporbit.freetype.FreeTypeConstants.FT_Kerning_Mode
+import java.nio.ByteBuffer
 
 /**
  * A handle to a given typographic face object. A face object models a given typeface, in a given style.
  */
-public class Face extends Pointer {
+class Face : Utils.Pointer {
+    private var data: ByteBuffer? = null // Save to delete later
 
-    private ByteBuffer data; // Save to delete later
+    constructor(pointer: Long) : super(pointer)
 
-    public Face(long pointer) {
-        super(pointer);
+    constructor(pointer: Long, data: ByteBuffer?) : super(pointer) {
+        this.data = data
     }
 
-    public Face(long pointer, ByteBuffer data) {
-        super(pointer);
-        this.data = data;
+    fun delete(): Boolean {
+        if (data != null) Utils.deleteBuffer(data)
+        return FreeType.FT_Done_Face(pointer)
     }
 
-    public boolean delete() {
-        if (data != null)
-            Utils.deleteBuffer(data);
-        return FreeType.FT_Done_Face(pointer);
-    }
-
-    public MTFreeTypeMathTable loadMathTable() {
+    fun loadMathTable(): MTFreeTypeMathTable {
         // Temporary buffer size of font.
-        ByteBuffer buffer = Utils.newBuffer(data.remaining());
-        MTFreeTypeMathTable fm = new MTFreeTypeMathTable(pointer, buffer);
-        Utils.deleteBuffer(buffer);
-        return fm;
+        val buffer = Utils.newBuffer(data!!.remaining())
+        val fm = MTFreeTypeMathTable(pointer, buffer!!)
+        Utils.deleteBuffer(buffer)
+        return fm
     }
 
 
-    public int getAscender() {
-        return FreeType.FT_Face_Get_ascender(pointer);
+    val ascender: Int
+        get() = FreeType.FT_Face_Get_ascender(pointer)
+
+    val descender: Int
+        get() = FreeType.FT_Face_Get_descender(pointer)
+
+    val faceFlags: Long
+        get() = FreeType.FT_Face_Get_face_flags(pointer)
+
+    val faceIndex: Int
+        get() = FreeType.FT_Face_Get_face_index(pointer)
+
+    val familyName: String?
+        get() = FreeType.FT_Face_Get_family_name(pointer)
+
+    val height: Int
+        get() = FreeType.FT_Face_Get_heigth(pointer)
+
+    val maxAdvanceHeight: Int
+        get() = FreeType.FT_Face_Get_max_advance_height(pointer)
+
+    val maxAdvanceWidth: Int
+        get() = FreeType.FT_Face_Get_max_advance_width(pointer)
+
+    val numFaces: Int
+        get() = FreeType.FT_Face_Get_num_faces(pointer)
+
+    val numGlyphs: Int
+        get() = FreeType.FT_Face_Get_num_glyphs(pointer)
+
+    val styleFlags: Long
+        get() = FreeType.FT_Face_Get_style_flags(pointer)
+
+    val styleName: String?
+        get() = FreeType.FT_Face_Get_style_name(pointer)
+
+    val underlinePosition: Int
+        get() = FreeType.FT_Face_Get_underline_position(pointer)
+
+    val underlineThickness: Int
+        get() = FreeType.FT_Face_Get_underline_thickness(pointer)
+
+    val unitsPerEM: Int
+        get() = FreeType.FT_Face_Get_units_per_EM(pointer)
+
+    fun getCharIndex(code: Int): Int {
+        return FreeType.FT_Get_Char_Index(pointer, code)
     }
 
-    public int getDescender() {
-        return FreeType.FT_Face_Get_descender(pointer);
+    fun hasKerning(): Boolean {
+        return FreeType.FT_HAS_KERNING(pointer)
     }
 
-    public long getFaceFlags() {
-        return FreeType.FT_Face_Get_face_flags(pointer);
+    fun selectSize(strikeIndex: Int): Boolean {
+        return FreeType.FT_Select_Size(pointer, strikeIndex)
     }
 
-    public int getFaceIndex() {
-        return FreeType.FT_Face_Get_face_index(pointer);
+    fun setCharSize(char_width: Int, char_height: Int, horz_resolution: Int, vert_resolution: Int): Boolean {
+        return FreeType.FT_Set_Char_Size(pointer, char_width, char_height, horz_resolution, vert_resolution)
     }
 
-    public String getFamilyName() {
-        return FreeType.FT_Face_Get_family_name(pointer);
+    fun loadGlyph(glyphIndex: Int, flags: Int): Boolean {
+        return FreeType.FT_Load_Glyph(pointer, glyphIndex, flags)
     }
 
-    public int getHeight() {
-        return FreeType.FT_Face_Get_heigth(pointer);
+    fun loadChar(c: Char, flags: Int): Boolean {
+        return FreeType.FT_Load_Char(pointer, c, flags)
     }
 
-    public int getMaxAdvanceHeight() {
-        return FreeType.FT_Face_Get_max_advance_height(pointer);
+    fun getKerning(left: Char, right: Char): Kerning? {
+        return getKerning(left, right, FT_Kerning_Mode.FT_KERNING_DEFAULT)
     }
 
-    public int getMaxAdvanceWidth() {
-        return FreeType.FT_Face_Get_max_advance_width(pointer);
+    fun getKerning(left: Char, right: Char, mode: FT_Kerning_Mode): Kerning? {
+        return FreeType.FT_Face_Get_Kerning(pointer, left, right, mode.ordinal)
     }
 
-    public int getNumFaces() {
-        return FreeType.FT_Face_Get_num_faces(pointer);
+    fun setPixelSizes(width: Float, height: Float): Boolean {
+        return FreeType.FT_Set_Pixel_Sizes(pointer, width, height)
     }
 
-    public int getNumGlyphs() {
-        return FreeType.FT_Face_Get_num_glyphs(pointer);
+    val glyphSlot: GlyphSlot?
+        get() {
+            val glyph = FreeType.FT_Face_Get_glyph(pointer)
+            if (glyph == 0L) return null
+            return GlyphSlot(glyph)
+        }
+
+    val size: Size?
+        get() {
+            val size = FreeType.FT_Face_Get_size(pointer)
+            if (size == 0L) return null
+            return Size(size)
+        }
+
+    fun checkTrueTypePatents(): Boolean {
+        return FreeType.FT_Face_CheckTrueTypePatents(pointer)
     }
 
-    public long getStyleFlags() {
-        return FreeType.FT_Face_Get_style_flags(pointer);
+    fun setUnpatentedHinting(newValue: Boolean): Boolean {
+        return FreeType.FT_Face_SetUnpatentedHinting(pointer, newValue)
     }
 
-    public String getStyleName() {
-        return FreeType.FT_Face_Get_style_name(pointer);
+    fun referenceFace(): Boolean {
+        return FreeType.FT_Reference_Face(pointer)
     }
 
-    public int getUnderlinePosition() {
-        return FreeType.FT_Face_Get_underline_position(pointer);
+    fun requestSize(sr: SizeRequest?): Boolean {
+        return FreeType.FT_Request_Size(pointer, sr)
     }
 
-    public int getUnderlineThickness() {
-        return FreeType.FT_Face_Get_underline_thickness(pointer);
+    val firstChar: IntArray?
+        get() = FreeType.FT_Get_First_Char(pointer)
+
+    val firstCharAsCharcode: Int
+        get() = firstChar!![0]
+
+    val firstCharAsGlyphIndex: Int
+        get() = firstChar!![1]
+
+    fun getNextChar(charcode: Long): Int { // I will not create getNextCharAsCharcode to do charcode++.
+        return FreeType.FT_Get_Next_Char(pointer, charcode)
     }
 
-    public int getUnitsPerEM() {
-        return FreeType.FT_Face_Get_units_per_EM(pointer);
+    fun getGlyphIndexByName(name: String?): Int {
+        return FreeType.FT_Get_Name_Index(pointer, name)
     }
 
-    public int getCharIndex(int code) {
-        return FreeType.FT_Get_Char_Index(pointer, code);
+    fun getTrackKerning(point_size: Int, degree: Int): Long {
+        return FreeType.FT_Get_Track_Kerning(pointer, point_size.toLong(), degree)
     }
 
-    public boolean hasKerning() {
-        return FreeType.FT_HAS_KERNING(pointer);
+    fun getGlyphName(glyphIndex: Int): String? {
+        return FreeType.FT_Get_Glyph_Name(pointer, glyphIndex)
     }
 
-    public boolean selectSize(int strikeIndex) {
-        return FreeType.FT_Select_Size(pointer, strikeIndex);
+    val postscriptName: String?
+        get() = FreeType.FT_Get_Postscript_Name(pointer)
+
+    fun selectCharmap(encoding: Int): Boolean {
+        return FreeType.FT_Select_Charmap(pointer, encoding)
     }
 
-    public boolean setCharSize(int char_width, int char_height, int horz_resolution, int vert_resolution) {
-        return FreeType.FT_Set_Char_Size(pointer, char_width, char_height, horz_resolution, vert_resolution);
+    fun setCharmap(charmap: CharMap): Boolean {
+        return FreeType.FT_Set_Charmap(pointer, charmap.pointer)
     }
 
-    public boolean loadGlyph(int glyphIndex, int flags) {
-        return FreeType.FT_Load_Glyph(pointer, glyphIndex, flags);
-    }
-
-    public boolean loadChar(char c, int flags) {
-        return FreeType.FT_Load_Char(pointer, c, flags);
-    }
-
-    public Kerning getKerning(char left, char right) {
-        return getKerning(left, right, FT_Kerning_Mode.FT_KERNING_DEFAULT);
-    }
-
-    public Kerning getKerning(char left, char right, FT_Kerning_Mode mode) {
-        return FreeType.FT_Face_Get_Kerning(pointer, left, right, mode.ordinal());
-    }
-
-    public boolean setPixelSizes(float width, float height) {
-        return FreeType.FT_Set_Pixel_Sizes(pointer, width, height);
-    }
-
-    public GlyphSlot getGlyphSlot() {
-        long glyph = FreeType.FT_Face_Get_glyph(pointer);
-        if (glyph == 0)
-            return null;
-        return new GlyphSlot(glyph);
-    }
-
-    public Size getSize() {
-        long size = FreeType.FT_Face_Get_size(pointer);
-        if (size == 0)
-            return null;
-        return new Size(size);
-    }
-
-    public boolean checkTrueTypePatents() {
-        return FreeType.FT_Face_CheckTrueTypePatents(pointer);
-    }
-
-    public boolean setUnpatentedHinting(boolean newValue) {
-        return FreeType.FT_Face_SetUnpatentedHinting(pointer, newValue);
-    }
-
-    public boolean referenceFace() {
-        return FreeType.FT_Reference_Face(pointer);
-    }
-
-    public boolean requestSize(SizeRequest sr) {
-        return FreeType.FT_Request_Size(pointer, sr);
-    }
-
-    public int[] getFirstChar() {
-        return FreeType.FT_Get_First_Char(pointer);
-    }
-
-    public int getFirstCharAsCharcode() {
-        return getFirstChar()[0];
-    }
-
-    public int getFirstCharAsGlyphIndex() {
-        return getFirstChar()[1];
-    }
-
-    public int getNextChar(long charcode) { // I will not create getNextCharAsCharcode to do charcode++.
-        return FreeType.FT_Get_Next_Char(pointer, charcode);
-    }
-
-    public int getGlyphIndexByName(String name) {
-        return FreeType.FT_Get_Name_Index(pointer, name);
-    }
-
-    public long getTrackKerning(int point_size, int degree) {
-        return FreeType.FT_Get_Track_Kerning(pointer, point_size, degree);
-    }
-
-    public String getGlyphName(int glyphIndex) {
-        return FreeType.FT_Get_Glyph_Name(pointer, glyphIndex);
-    }
-
-    public String getPostscriptName() {
-        return FreeType.FT_Get_Postscript_Name(pointer);
-    }
-
-    public boolean selectCharmap(int encoding) {
-        return FreeType.FT_Select_Charmap(pointer, encoding);
-    }
-
-    public boolean setCharmap(CharMap charmap) {
-        return FreeType.FT_Set_Charmap(pointer, charmap.getPointer());
-    }
-
-    public short getFSTypeFlags() {
-        return FreeType.FT_Get_FSType_Flags(pointer);
-    }
+    val fSTypeFlags: Short
+        get() = FreeType.FT_Get_FSType_Flags(pointer)
 }

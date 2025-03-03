@@ -1,40 +1,26 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.Utils.Pointer;
+import java.nio.ByteBuffer
 
-import java.nio.ByteBuffer;
+class Bitmap(pointer: Long) : Utils.Pointer(pointer) {
+    val width: Int
+        get() = FreeType.FT_Bitmap_Get_width(pointer)
 
-public class Bitmap extends Pointer {
+    val rows: Int
+        get() = FreeType.FT_Bitmap_Get_rows(pointer)
 
-    public Bitmap(long pointer) {
-        super(pointer);
-    }
+    val pitch: Int
+        get() = FreeType.FT_Bitmap_Get_pitch(pointer)
 
-    public int getWidth() {
-        return FreeType.FT_Bitmap_Get_width(pointer);
-    }
+    val numGrays: Short
+        get() = FreeType.FT_Bitmap_Get_num_grays(pointer)
 
-    public int getRows() {
-        return FreeType.FT_Bitmap_Get_rows(pointer);
-    }
+    val paletteMode: Char
+        get() = FreeType.FT_Bitmap_Get_palette_mode(pointer)
 
-    public int getPitch() {
-        return FreeType.FT_Bitmap_Get_pitch(pointer);
-    }
+    val pixelMode: Char
+        get() = FreeType.FT_Bitmap_Get_pixel_mode(pointer)
 
-    public short getNumGrays() {
-        return FreeType.FT_Bitmap_Get_num_grays(pointer);
-    }
-
-    public char getPaletteMode() {
-        return FreeType.FT_Bitmap_Get_palette_mode(pointer);
-    }
-
-    public char getPixelMode() {
-        return FreeType.FT_Bitmap_Get_pixel_mode(pointer);
-    }
-
-    public ByteBuffer getBuffer() {
-        return FreeType.FT_Bitmap_Get_buffer(pointer);
-    }
+    val buffer: ByteBuffer?
+        get() = FreeType.FT_Bitmap_Get_buffer(pointer)
 }

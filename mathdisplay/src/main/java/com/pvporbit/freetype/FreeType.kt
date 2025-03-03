@@ -1,26 +1,22 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.GlyphSlot.Advance;
+import java.nio.ByteBuffer
 
-import java.nio.ByteBuffer;
-
-public class FreeType {
-
+object FreeType {
     /* FreeType functions */
-
-    public static native long FT_Init_FreeType();
+    external fun FT_Init_FreeType(): Long
 
     // ---- Library
-    public static native boolean FT_Done_FreeType(long library);
+    external fun FT_Done_FreeType(library: Long): Boolean
 
-    public static native LibraryVersion FT_Library_Version(long library); // [major, minor, patch]
+    external fun FT_Library_Version(library: Long): LibraryVersion? // [major, minor, patch]
 
     //	public static native long           FT_Open_Face(long library, FT_Open_Args args, long faceIndex); // Nope.
     //	public static native long           FT_New_Face(long library, String filepathname, long faceIndex); // Please use 'FT_New_Memory_Face' or preferable 'library.newFace(path)'
-    public static native long FT_New_Memory_Face(long library, ByteBuffer data, int length, long faceIndex);
+    external fun FT_New_Memory_Face(library: Long, data: ByteBuffer?, length: Int, faceIndex: Long): Long
 
     // -- For getting math table
-	/*
+    /*
 	  Uses FT_Load_Sfnt_Table with Tag fixed to MATH
 	  data is preallocated and must be large enough to hold entire math table
 
@@ -30,185 +26,187 @@ public class FreeType {
 
 
 	 */
-    public static native boolean FT_Load_Math_Table(long face, ByteBuffer data, int length);
+    external fun FT_Load_Math_Table(face: Long, data: ByteBuffer?, length: Int): Boolean
 
 
     // ---- Face
-    public static native int FT_Face_Get_ascender(long face);
+    external fun FT_Face_Get_ascender(face: Long): Int
 
-    public static native int FT_Face_Get_descender(long face);
+    external fun FT_Face_Get_descender(face: Long): Int
 
-    public static native long FT_Face_Get_face_flags(long face);
+    external fun FT_Face_Get_face_flags(face: Long): Long
 
-    public static native int FT_Face_Get_face_index(long face);
+    external fun FT_Face_Get_face_index(face: Long): Int
 
-    public static native String FT_Face_Get_family_name(long face);
+    external fun FT_Face_Get_family_name(face: Long): String?
 
-    public static native int FT_Face_Get_heigth(long face);
+    external fun FT_Face_Get_heigth(face: Long): Int
 
-    public static native int FT_Face_Get_max_advance_height(long face);
+    external fun FT_Face_Get_max_advance_height(face: Long): Int
 
-    public static native int FT_Face_Get_max_advance_width(long face);
+    external fun FT_Face_Get_max_advance_width(face: Long): Int
 
-    public static native int FT_Face_Get_num_faces(long face);
+    external fun FT_Face_Get_num_faces(face: Long): Int
 
-    public static native int FT_Face_Get_num_glyphs(long face);
+    external fun FT_Face_Get_num_glyphs(face: Long): Int
 
-    public static native long FT_Face_Get_style_flags(long face);
+    external fun FT_Face_Get_style_flags(face: Long): Long
 
-    public static native String FT_Face_Get_style_name(long face);
+    external fun FT_Face_Get_style_name(face: Long): String?
 
-    public static native int FT_Face_Get_underline_position(long face);
+    external fun FT_Face_Get_underline_position(face: Long): Int
 
-    public static native int FT_Face_Get_underline_thickness(long face);
+    external fun FT_Face_Get_underline_thickness(face: Long): Int
 
-    public static native int FT_Face_Get_units_per_EM(long face);
+    external fun FT_Face_Get_units_per_EM(face: Long): Int
 
-    public static native long FT_Face_Get_glyph(long face); /* Pointer to FT_GlyphSlot */
+    external fun FT_Face_Get_glyph(face: Long): Long /* Pointer to FT_GlyphSlot */
 
-    public static native long FT_Face_Get_size(long face); /* Pointer to FT_Size */
+    external fun FT_Face_Get_size(face: Long): Long /* Pointer to FT_Size */
 
-    public static native long FT_Get_Track_Kerning(long face, long point_size, int degree);
+    external fun FT_Get_Track_Kerning(face: Long, point_size: Long, degree: Int): Long
 
-    public static native Kerning FT_Face_Get_Kerning(long face, char left, char right, int mode);
+    external fun FT_Face_Get_Kerning(face: Long, left: Char, right: Char, mode: Int): Kerning?
 
-    public static native boolean FT_Done_Face(long face);
+    external fun FT_Done_Face(face: Long): Boolean
 
-    public static native boolean FT_Reference_Face(long face);
+    external fun FT_Reference_Face(face: Long): Boolean
 
-    public static native boolean FT_HAS_KERNING(long face);
+    external fun FT_HAS_KERNING(face: Long): Boolean
 
-    public static native String FT_Get_Postscript_Name(long face);
+    external fun FT_Get_Postscript_Name(face: Long): String?
 
-    public static native boolean FT_Select_Charmap(long face, int encoding);
+    external fun FT_Select_Charmap(face: Long, encoding: Int): Boolean
 
-    public static native boolean FT_Set_Charmap(long face, long charmap);
+    external fun FT_Set_Charmap(face: Long, charmap: Long): Boolean
 
-    public static native boolean FT_Face_CheckTrueTypePatents(long face);
+    external fun FT_Face_CheckTrueTypePatents(face: Long): Boolean
 
-    public static native boolean FT_Face_SetUnpatentedHinting(long face, boolean value);
+    external fun FT_Face_SetUnpatentedHinting(face: Long, value: Boolean): Boolean
 
-    public static native int[] FT_Get_First_Char(long face); // [charcode, glyphIndex]
+    external fun FT_Get_First_Char(face: Long): IntArray? // [charcode, glyphIndex]
 
-    public static native int FT_Get_Next_Char(long face, long charcode);
+    external fun FT_Get_Next_Char(face: Long, charcode: Long): Int
 
-    public static native int FT_Get_Char_Index(long face, int code);
+    external fun FT_Get_Char_Index(face: Long, code: Int): Int
 
-    public static native int FT_Get_Name_Index(long face, String name);
+    external fun FT_Get_Name_Index(face: Long, name: String?): Int
 
-    public static native String FT_Get_Glyph_Name(long face, int glyphIndex);
+    external fun FT_Get_Glyph_Name(face: Long, glyphIndex: Int): String?
 
-    public static native short FT_Get_FSType_Flags(long face);
+    external fun FT_Get_FSType_Flags(face: Long): Short
 
-    public static native boolean FT_Select_Size(long face, int strikeIndex);
+    external fun FT_Select_Size(face: Long, strikeIndex: Int): Boolean
 
-    public static native boolean FT_Load_Char(long face, char c, int flags);
+    external fun FT_Load_Char(face: Long, c: Char, flags: Int): Boolean
 
     //	public static native boolean FT_Attach_File              (long face, String filepathname); // Nope.
-//	public static native boolean FT_Attach_Stream            (long face, FT_Open_Args parameters); // Nope.
-//	public static native boolean FT_Set_Transform            (long face, FT_Matrix* matrix, FT_Vector* delta);
-    public static native boolean FT_Request_Size(long face, SizeRequest sizeRequest);
+    //	public static native boolean FT_Attach_Stream            (long face, FT_Open_Args parameters); // Nope.
+    //	public static native boolean FT_Set_Transform            (long face, FT_Matrix* matrix, FT_Vector* delta);
+    external fun FT_Request_Size(face: Long, sizeRequest: SizeRequest?): Boolean
 
-    public static native boolean FT_Set_Pixel_Sizes(long face, float width, float height);
+    external fun FT_Set_Pixel_Sizes(face: Long, width: Float, height: Float): Boolean
 
-    public static native boolean FT_Load_Glyph(long face, int glyphIndex, int loadFlags);
+    external fun FT_Load_Glyph(face: Long, glyphIndex: Int, loadFlags: Int): Boolean
 
-    public static native boolean FT_Set_Char_Size(long face, int char_width, int char_height, int horz_resolution, int vert_resolution);
+    external fun FT_Set_Char_Size(
+        face: Long,
+        char_width: Int,
+        char_height: Int,
+        horz_resolution: Int,
+        vert_resolution: Int
+    ): Boolean
 
     // ---- Size
-    public static native long FT_Size_Get_metrics(long size); /* Pointer to SizeMetrics */
+    external fun FT_Size_Get_metrics(size: Long): Long /* Pointer to SizeMetrics */
 
     // ---- Size Metrics
-    public static native int FT_Size_Metrics_Get_ascender(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_ascender(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_descender(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_descender(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_height(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_height(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_max_advance(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_max_advance(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_x_ppem(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_x_ppem(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_x_scale(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_x_scale(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_y_ppem(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_y_ppem(sizeMetrics: Long): Int
 
-    public static native int FT_Size_Metrics_Get_y_scale(long sizeMetrics);
+    external fun FT_Size_Metrics_Get_y_scale(sizeMetrics: Long): Int
 
     // ---- GlyphSlot
-    public static native long FT_GlyphSlot_Get_linearHoriAdvance(long glyphSlot);
+    external fun FT_GlyphSlot_Get_linearHoriAdvance(glyphSlot: Long): Long
 
-    public static native long FT_GlyphSlot_Get_linearVertAdvance(long glyphSlot);
+    external fun FT_GlyphSlot_Get_linearVertAdvance(glyphSlot: Long): Long
 
-    public static native Advance FT_GlyphSlot_Get_advance(long glyphSlot);
+    external fun FT_GlyphSlot_Get_advance(glyphSlot: Long): GlyphSlot.Advance?
 
-    public static native int FT_GlyphSlot_Get_format(long glyphSlot);
+    external fun FT_GlyphSlot_Get_format(glyphSlot: Long): Int
 
-    public static native int FT_GlyphSlot_Get_bitmap_left(long glyphSlot);
+    external fun FT_GlyphSlot_Get_bitmap_left(glyphSlot: Long): Int
 
-    public static native int FT_GlyphSlot_Get_bitmap_top(long glyphSlot);
+    external fun FT_GlyphSlot_Get_bitmap_top(glyphSlot: Long): Int
 
-    public static native long FT_GlyphSlot_Get_bitmap(long glyphSlot); /* Pointer to Bitmap */
+    external fun FT_GlyphSlot_Get_bitmap(glyphSlot: Long): Long /* Pointer to Bitmap */
 
-    public static native long FT_GlyphSlot_Get_metrics(long glyphSlot); /* Pointer to GlyphMetrics */
+    external fun FT_GlyphSlot_Get_metrics(glyphSlot: Long): Long /* Pointer to GlyphMetrics */
 
     //	public static native long     FT_Get_Glyph                      (long glyphSlot); /* Pointer to Glyph */
-//	public static native SubGlyph FT_Get_SubGlyph_Info				(long glyphSlot, int subIndex);
-    public static native boolean FT_Render_Glyph(long glyphSlot, int renderMode);
+    //	public static native SubGlyph FT_Get_SubGlyph_Info				(long glyphSlot, int subIndex);
+    external fun FT_Render_Glyph(glyphSlot: Long, renderMode: Int): Boolean
 
     // ---- GlyphMetrics
-    public static native int FT_Glyph_Metrics_Get_width(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_width(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_height(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_height(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_horiAdvance(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_horiAdvance(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_vertAdvance(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_vertAdvance(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_horiBearingX(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_horiBearingX(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_horiBearingY(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_horiBearingY(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_vertBearingX(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_vertBearingX(glyphMetrics: Long): Int
 
-    public static native int FT_Glyph_Metrics_Get_vertBearingY(long glyphMetrics);
+    external fun FT_Glyph_Metrics_Get_vertBearingY(glyphMetrics: Long): Int
 
     // ---- Bitmap
-    public static native int FT_Bitmap_Get_width(long bitmap);
+    external fun FT_Bitmap_Get_width(bitmap: Long): Int
 
-    public static native int FT_Bitmap_Get_rows(long bitmap);
+    external fun FT_Bitmap_Get_rows(bitmap: Long): Int
 
-    public static native int FT_Bitmap_Get_pitch(long bitmap);
+    external fun FT_Bitmap_Get_pitch(bitmap: Long): Int
 
-    public static native short FT_Bitmap_Get_num_grays(long bitmap);
+    external fun FT_Bitmap_Get_num_grays(bitmap: Long): Short
 
-    public static native char FT_Bitmap_Get_palette_mode(long bitmap);
+    external fun FT_Bitmap_Get_palette_mode(bitmap: Long): Char
 
-    public static native char FT_Bitmap_Get_pixel_mode(long bitmap);
+    external fun FT_Bitmap_Get_pixel_mode(bitmap: Long): Char
 
-    public static native ByteBuffer FT_Bitmap_Get_buffer(long bitmap);
+    external fun FT_Bitmap_Get_buffer(bitmap: Long): ByteBuffer?
 
     // ---- Charmap
-    public static native int FT_Get_Charmap_Index(long charmap);
+    external fun FT_Get_Charmap_Index(charmap: Long): Int
 
     // ---- Glyph
     // TODO
-
     /* Java Object functions */
-
-    public static Library newLibrary() {
-        long library = FT_Init_FreeType();
-        if (library == 0)
-            return null;
-        return new Library(library);
+    fun newLibrary(): Library? {
+        val library = FT_Init_FreeType()
+        if (library == 0L) return null
+        return Library(library)
     }
 
     /* --------------------- */
-
-    static { // Load library
+    init { // Load library
         try {
-            System.loadLibrary("freetype-jni");
-					/*
+            System.loadLibrary("freetype-jni")
+            /*
 			if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
 				int bits = 86;
 				if (System.getProperty("os.arch").contains("64"))
@@ -217,11 +215,11 @@ public class FreeType {
 			} else
 				throw new Exception("Operating system not supported.");
 				*/
-        } catch (UnsatisfiedLinkError e) {
-            System.err.println("Can't find the native file for FreeType-jni.");
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (e: UnsatisfiedLinkError) {
+            System.err.println("Can't find the native file for FreeType-jni.")
+            throw e
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

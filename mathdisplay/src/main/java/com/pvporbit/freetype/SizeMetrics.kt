@@ -1,42 +1,27 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.Utils.Pointer;
+class SizeMetrics(pointer: Long) : Utils.Pointer(pointer) {
+    val ascender: Int
+        get() = FreeType.FT_Size_Metrics_Get_ascender(pointer)
 
-public class SizeMetrics extends Pointer {
+    val descender: Int
+        get() = FreeType.FT_Size_Metrics_Get_descender(pointer)
 
-    public SizeMetrics(long pointer) {
-        super(pointer);
-    }
+    val height: Int
+        get() = FreeType.FT_Size_Metrics_Get_height(pointer)
 
-    public int getAscender() {
-        return FreeType.FT_Size_Metrics_Get_ascender(pointer);
-    }
+    val maxAdvance: Int
+        get() = FreeType.FT_Size_Metrics_Get_max_advance(pointer)
 
-    public int getDescender() {
-        return FreeType.FT_Size_Metrics_Get_descender(pointer);
-    }
+    val xppem: Int
+        get() = FreeType.FT_Size_Metrics_Get_x_ppem(pointer)
 
-    public int getHeight() {
-        return FreeType.FT_Size_Metrics_Get_height(pointer);
-    }
+    val yppem: Int
+        get() = FreeType.FT_Size_Metrics_Get_y_ppem(pointer)
 
-    public int getMaxAdvance() {
-        return FreeType.FT_Size_Metrics_Get_max_advance(pointer);
-    }
+    val xScale: Int
+        get() = FreeType.FT_Size_Metrics_Get_x_scale(pointer)
 
-    public int getXppem() {
-        return FreeType.FT_Size_Metrics_Get_x_ppem(pointer);
-    }
-
-    public int getYppem() {
-        return FreeType.FT_Size_Metrics_Get_y_ppem(pointer);
-    }
-
-    public int getXScale() {
-        return FreeType.FT_Size_Metrics_Get_x_scale(pointer);
-    }
-
-    public int getYScale() {
-        return FreeType.FT_Size_Metrics_Get_y_scale(pointer);
-    }
+    val yScale: Int
+        get() = FreeType.FT_Size_Metrics_Get_y_scale(pointer)
 }

@@ -90,9 +90,9 @@ class MTFontMathTable(val font: MTFont, var istreamotf: InputStream?) {
             val library = FreeType.newLibrary()
                     ?: throw  MathDisplayException("Error initializing FreeType.")
 
-            freeface = library.newFace(barray, 0)
+            freeface = library.newFace(barray!!, 0)!!
             checkFontSize()
-            unitsPerEm = freeface.getUnitsPerEM()
+            unitsPerEm = freeface.unitsPerEM
 
             freeTypeMathTable = freeface.loadMathTable()
 
@@ -131,7 +131,7 @@ class MTFontMathTable(val font: MTFont, var istreamotf: InputStream?) {
     }
 
     fun getGlyphName(gid: Int): String {
-        val g = this.freeface.getGlyphName(gid)
+        val g = this.freeface.getGlyphName(gid)!!
         return g
     }
 
@@ -148,7 +148,7 @@ class MTFontMathTable(val font: MTFont, var istreamotf: InputStream?) {
     fun getAdvancesForGlyphs(glyphs: List<Int>, advances: Array<Float>, count: Int) {
         for (i in 0 until count) {
             if (!freeface.loadGlyph(glyphs[i], FT_LOAD_NO_SCALE)) {
-                val gslot = freeface.getGlyphSlot()
+                val gslot = freeface.glyphSlot!!
                 val a = gslot.advance
                 if (a != null) {
                     advances[i] = fontUnitsToPt(a.x)
@@ -173,15 +173,15 @@ class MTFontMathTable(val font: MTFont, var istreamotf: InputStream?) {
         for (i in 0 until count) {
             if (!freeface.loadGlyph(glyphs[i], FT_LOAD_NO_SCALE)) {
                 val nb = BoundingBox()
-                val gslot = freeface.getGlyphSlot()
-                val m = gslot.metrics
+                val gslot = freeface.glyphSlot!!
+                val m = gslot.metrics!!
 
-                val w = fontUnitsToPt(m.getWidth())
-                val h = fontUnitsToPt(m.getHeight())
+                val w = fontUnitsToPt(m.width)
+                val h = fontUnitsToPt(m.height)
                 //val HoriAdvance = fontUnitsToPt(m.getHoriAdvance())
                 //val VertAdvance = fontUnitsToPt(m.getVertAdvance())
-                val horiBearingX = fontUnitsToPt(m.getHoriBearingX())
-                val horiBearingY = fontUnitsToPt(m.getHoriBearingY())
+                val horiBearingX = fontUnitsToPt(m.horiBearingX)
+                val horiBearingY = fontUnitsToPt(m.horiBearingY)
                 //val VertBearingX = fontUnitsToPt(m.getVertBearingX())
                 //val VertBearingY = fontUnitsToPt(m.getVertBearingY())
                 //println("$a $m $w $h $HoriAdvance $VertAdvance $horiBearingX $horiBearingY $VertBearingX $VertBearingY")

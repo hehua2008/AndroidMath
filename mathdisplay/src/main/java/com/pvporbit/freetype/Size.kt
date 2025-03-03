@@ -1,17 +1,10 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.Utils.Pointer;
-
-public class Size extends Pointer {
-
-    public Size(long pointer) {
-        super(pointer);
-    }
-
-    public SizeMetrics getMetrics() {
-        long sizeMetrics = FreeType.FT_Size_Get_metrics(pointer);
-        if (sizeMetrics <= 0)
-            return null;
-        return new SizeMetrics(sizeMetrics);
-    }
+class Size(pointer: Long) : Utils.Pointer(pointer) {
+    val metrics: SizeMetrics?
+        get() {
+            val sizeMetrics = FreeType.FT_Size_Get_metrics(pointer)
+            if (sizeMetrics <= 0) return null
+            return SizeMetrics(sizeMetrics)
+        }
 }

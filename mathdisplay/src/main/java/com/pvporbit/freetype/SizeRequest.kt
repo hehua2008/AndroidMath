@@ -1,58 +1,33 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.FreeTypeConstants.FT_Size_Request_Type;
+import com.pvporbit.freetype.FreeTypeConstants.FT_Size_Request_Type
 
-public class SizeRequest {
+class SizeRequest(
+    type: FT_Size_Request_Type,
+    var width: Long,
+    var height: Long,
+    var horiResolution: Int,
+    var vertResolution: Int
+) {
+    private var type: Int
 
-    private int type;
-    private long width, height;
-    private int horiResolution, vertResolution;
-
-    public SizeRequest(FT_Size_Request_Type type, long width, long height, int horiResolution, int vertResolution) {
-        this.type = type.ordinal();
-        this.width = width;
-        this.height = height;
-        this.horiResolution = horiResolution;
-        this.vertResolution = vertResolution;
+    init {
+        this.type = type.ordinal
     }
 
-    public FT_Size_Request_Type getType() {
-        return FT_Size_Request_Type.values()[type];
+    fun getType(): FT_Size_Request_Type {
+        return FT_Size_Request_Type.entries[type]
     }
 
-    public long getWidth() {
-        return width;
+    fun setType(type: FT_Size_Request_Type) {
+        this.type = type.ordinal
     }
 
-    public long getHeight() {
-        return height;
+    fun setWidth(width: Int) {
+        this.width = width.toLong()
     }
 
-    public int getVertResolution() {
-        return vertResolution;
-    }
-
-    public int getHoriResolution() {
-        return horiResolution;
-    }
-
-    public void setType(FT_Size_Request_Type type) {
-        this.type = type.ordinal();
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public void setHoriResolution(int horiResolution) {
-        this.horiResolution = horiResolution;
-    }
-
-    public void setVertResolution(int vertResolution) {
-        this.vertResolution = vertResolution;
+    fun setHeight(height: Int) {
+        this.height = height.toLong()
     }
 }

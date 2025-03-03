@@ -1,14 +1,9 @@
-package com.pvporbit.freetype;
+package com.pvporbit.freetype
 
-import com.pvporbit.freetype.Utils.Pointer;
-
-public class CharMap extends Pointer {
-
-    public CharMap(long pointer) {
-        super(pointer);
-    }
-
-    public static int getCharmapIndex(CharMap charmap) {
-        return FreeType.FT_Get_Charmap_Index(charmap.getPointer());
+class CharMap(pointer: Long) : Utils.Pointer(pointer) {
+    companion object {
+        fun getCharmapIndex(charmap: CharMap): Int {
+            return FreeType.FT_Get_Charmap_Index(charmap.pointer)
+        }
     }
 }
