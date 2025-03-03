@@ -400,10 +400,125 @@ Java_com_pvporbit_freetype_FreeType_FT_1Bitmap_1Get_1pixel_1mode(JNIEnv *env, jc
     return ((FT_Bitmap *) bitmap)->pixel_mode;
 }
 
-JNIEXPORT jobject JNICALL
+JNIEXPORT jbyteArray JNICALL
 Java_com_pvporbit_freetype_FreeType_FT_1Bitmap_1Get_1buffer(JNIEnv *env, jclass obj, jlong bitmap) {
     FT_Bitmap *bmp = (FT_Bitmap *) bitmap;
-    return env->NewDirectByteBuffer((void *) bmp->buffer, bmp->rows * bmp->width * abs(bmp->pitch));
+    if (bmp->buffer == nullptr) {
+        return nullptr;
+    }
+    jbyteArray byteArray = nullptr;
+
+    // 根据像素格式处理数据
+    switch (bmp->pixel_mode) {
+        case FT_PIXEL_MODE_MONO: {
+            // 1 位单色模式，每个像素用 1 位表示
+            // 将每个字节的 8 个像素解包为 8 个字节（每个字节表示一个像素）
+            jsize unpackedSize = bmp->rows * bmp->width; // 解包后的缓冲区大小
+            byteArray = env->NewByteArray(unpackedSize);
+            if (byteArray == nullptr) {
+                return nullptr; // 处理内存不足
+            }
+            jbyte *unpackedData = env->GetByteArrayElements(byteArray, nullptr);
+            const unsigned char *src = bmp->buffer;
+            for (int y = 0; y < bmp->rows; y++) {
+                for (int x = 0; x < bmp->width; x++) {
+                    int byteIndex = y * abs(bmp->pitch) + x / 8;
+                    int bitIndex = 7 - (x % 8); // MSB 顺序
+                    unpackedData[y * bmp->width + x] = (src[byteIndex] & (1 << bitIndex)) ? 0xFF : 0x00;
+                }
+            }
+            env->ReleaseByteArrayElements(byteArray, unpackedData, 0);
+            break;
+        }
+
+        case FT_PIXEL_MODE_GRAY: {
+            // 8 位灰度模式，直接拷贝
+            jsize bufferSize = bmp->rows * abs(bmp->pitch);
+            byteArray = env->NewByteArray(bufferSize);
+            if (byteArray == nullptr) {
+                return nullptr; // 处理内存不足
+            }
+            env->SetByteArrayRegion(byteArray, 0, bufferSize, (jbyte *) bmp->buffer);
+            break;
+        }
+
+        case FT_PIXEL_MODE_GRAY2: {
+            // 2 位灰度模式，每个像素用 2 位表示
+            // 需要将每个字节的 4 个像素解包为 4 个字节（每个字节表示一个像素）
+            jsize unpackedSize = bmp->rows * bmp->width; // 解包后的缓冲区大小
+            byteArray = env->NewByteArray(unpackedSize);
+            if (byteArray == nullptr) {
+                return nullptr; // 处理内存不足
+            }
+            jbyte *unpackedData = env->GetByteArrayElements(byteArray, nullptr);
+            const unsigned char *src = bmp->buffer;
+            for (int y = 0; y < bmp->rows; y++) {
+                for (int x = 0; x < bmp->width; x++) {
+                    int byteIndex = y * abs(bmp->pitch) + x / 4;
+                    int bitIndex = 6 - (x % 4) * 2; // MSB 顺序，每个像素占 2 位
+                    int value = (src[byteIndex] >> bitIndex) & 0x03; // 提取 2 位像素值
+                    unpackedData[y * bmp->width + x] = (jbyte) (value * 0x55); // 0x55 = 85，线性映射到 0-255
+                }
+            }
+            env->ReleaseByteArrayElements(byteArray, unpackedData, 0);
+            break;
+        }
+
+        case FT_PIXEL_MODE_GRAY4: {
+            // 4 位灰度模式，每个像素用 4 位表示
+            // 需要将每个字节的 2 个像素解包为 2 个字节（每个字节表示一个像素）
+            jsize unpackedSize = bmp->rows * bmp->width; // 解包后的缓冲区大小
+            byteArray = env->NewByteArray(unpackedSize);
+            if (byteArray == nullptr) {
+                return nullptr; // 处理内存不足
+            }
+            jbyte *unpackedData = env->GetByteArrayElements(byteArray, nullptr);
+            const unsigned char *src = bmp->buffer;
+            for (int y = 0; y < bmp->rows; y++) {
+                for (int x = 0; x < bmp->width; x++) {
+                    int byteIndex = y * abs(bmp->pitch) + x / 2;
+                    int bitIndex = 4 - (x % 2) * 4; // MSB 顺序，每个像素占 4 位
+                    int value = (src[byteIndex] >> bitIndex) & 0x0F; // 提取 4 位像素值
+                    unpackedData[y * bmp->width + x] = (jbyte) (value * 0x11); // 0x11 = 17，线性映射到 0-255
+                }
+            }
+            env->ReleaseByteArrayElements(byteArray, unpackedData, 0);
+            break;
+        }
+
+        case FT_PIXEL_MODE_LCD:
+        case FT_PIXEL_MODE_LCD_V: {
+            // LCD 模式，直接拷贝（假设为 8 位/像素）
+            jsize bufferSize = bmp->rows * abs(bmp->pitch);
+            byteArray = env->NewByteArray(bufferSize);
+            if (byteArray == nullptr) {
+                return nullptr; // 处理内存不足
+            }
+            env->SetByteArrayRegion(byteArray, 0, bufferSize, (jbyte *) bmp->buffer);
+            break;
+        }
+
+        case FT_PIXEL_MODE_BGRA: {
+            // BGRA 模式，4 通道，每个像素用 4 字节表示
+            // 直接拷贝即可
+            jsize bufferSize = bmp->rows * abs(bmp->pitch);
+            byteArray = env->NewByteArray(bufferSize);
+            if (byteArray == nullptr) {
+                return nullptr; // 处理内存不足
+            }
+            env->SetByteArrayRegion(byteArray, 0, bufferSize, (jbyte *) bmp->buffer);
+            break;
+        }
+
+        default: {
+            // 不支持的模式，抛出异常
+            jclass cls = env->FindClass("java/lang/UnsupportedOperationException");
+            env->ThrowNew(cls, "Unsupported pixel mode: " + bmp->pixel_mode);
+            return nullptr;
+        }
+    }
+
+    return byteArray;
 }
 
 JNIEXPORT jint JNICALL

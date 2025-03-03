@@ -618,9 +618,9 @@ JNIEXPORT jchar JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Bitmap_1Get_1pix
 /*
  * Class:     com_pvporbit_freetype_FreeType
  * Method:    FT_Bitmap_Get_buffer
- * Signature: (J)Ljava/nio/ByteBuffer;
+ * Signature: (J)[B
  */
-JNIEXPORT jobject JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Bitmap_1Get_1buffer
+JNIEXPORT jbyteArray JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Bitmap_1Get_1buffer
         (JNIEnv *, jclass, jlong);
 
 /*

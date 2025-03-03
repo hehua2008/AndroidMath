@@ -188,7 +188,7 @@ object FreeType {
 
     external fun FT_Bitmap_Get_pixel_mode(bitmap: Long): Char
 
-    external fun FT_Bitmap_Get_buffer(bitmap: Long): ByteBuffer?
+    external fun FT_Bitmap_Get_buffer(bitmap: Long): ByteArray?
 
     // ---- Charmap
     external fun FT_Get_Charmap_Index(charmap: Long): Int

@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.agog.mathdisplay.parse.MathDisplayException
 import com.pvporbit.freetype.FreeTypeConstants
+import java.nio.ByteBuffer
 
 class MTDrawFreeType(val mathfont: MTFontMathTable) {
 
@@ -22,7 +23,7 @@ class MTDrawFreeType(val mathfont: MTFontMathTable) {
                     }
                 } else {
                     val bitmap = Bitmap.createBitmap(plainbitmap.width, plainbitmap.rows, Bitmap.Config.ALPHA_8)
-                    bitmap.copyPixelsFromBuffer(plainbitmap.buffer!!)
+                    bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(plainbitmap.buffer!!))
                     val metrics = gslot.metrics!!
                     val offx = metrics.horiBearingX / 64.0f  // 26.6 fixed point integer from freetype
                     val offy = metrics.horiBearingY / 64.0f
