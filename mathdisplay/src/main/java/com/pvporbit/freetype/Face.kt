@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 /**
  * A handle to a given typographic face object. A face object models a given typeface, in a given style.
  */
-class Face : Utils.Pointer {
+class Face : NativeWrapper {
     private var data: ByteBuffer? = null // Save to delete later
 
     constructor(pointer: Long) : super(pointer)

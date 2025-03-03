@@ -1,6 +1,6 @@
 package com.pvporbit.freetype
 
-class SizeMetrics(pointer: Long) : Utils.Pointer(pointer) {
+class SizeMetrics(pointer: Long) : NativeWrapper(pointer) {
     val ascender: Int
         get() = FreeType.FT_Size_Metrics_Get_ascender(pointer)
 

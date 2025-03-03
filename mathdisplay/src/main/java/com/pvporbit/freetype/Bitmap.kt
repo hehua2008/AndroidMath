@@ -2,7 +2,7 @@ package com.pvporbit.freetype
 
 import java.nio.ByteBuffer
 
-class Bitmap(pointer: Long) : Utils.Pointer(pointer) {
+class Bitmap(pointer: Long) : NativeWrapper(pointer) {
     val width: Int
         get() = FreeType.FT_Bitmap_Get_width(pointer)
 

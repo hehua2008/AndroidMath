@@ -25,6 +25,4 @@ object Utils {
     external fun fillBuffer(bytes: ByteArray?, buffer: ByteBuffer?, length: Int)
 
     external fun deleteBuffer(buffer: ByteBuffer?)
-
-    open class Pointer(var pointer: Long)
 }
