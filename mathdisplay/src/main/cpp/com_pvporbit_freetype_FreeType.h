@@ -194,9 +194,9 @@ JNIEXPORT jlong JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Get_1Track_1Kern
 /*
  * Class:     com_pvporbit_freetype_FreeType
  * Method:    FT_Face_Get_Kerning
- * Signature: (JCCI)Lcom/pvporbit/freetype/Kerning;
+ * Signature: (JCCI)J
  */
-JNIEXPORT jobject JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Face_1Get_1Kerning
+JNIEXPORT jlong JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Face_1Get_1Kerning
         (JNIEnv *, jclass, jlong, jchar, jchar, jint);
 
 /*
@@ -450,9 +450,9 @@ JNIEXPORT jlong JNICALL Java_com_pvporbit_freetype_FreeType_FT_1GlyphSlot_1Get_1
 /*
  * Class:     com_pvporbit_freetype_FreeType
  * Method:    FT_GlyphSlot_Get_advance
- * Signature: (J)Lcom/pvporbit/freetype/GlyphSlot/Advance;
+ * Signature: (J)J
  */
-JNIEXPORT jobject JNICALL Java_com_pvporbit_freetype_FreeType_FT_1GlyphSlot_1Get_1advance
+JNIEXPORT jlong JNICALL Java_com_pvporbit_freetype_FreeType_FT_1GlyphSlot_1Get_1advance
         (JNIEnv *, jclass, jlong);
 
 /*
@@ -629,6 +629,22 @@ JNIEXPORT jbyteArray JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Bitmap_1Get
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Get_1Charmap_1Index
+        (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_pvporbit_freetype_FreeType
+ * Method:    FT_Vector_Get_x
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Vector_1Get_1x
+        (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_pvporbit_freetype_FreeType
+ * Method:    FT_Vector_Get_y
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_pvporbit_freetype_FreeType_FT_1Vector_1Get_1y
         (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus

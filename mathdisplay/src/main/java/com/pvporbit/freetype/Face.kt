@@ -103,7 +103,8 @@ class Face : NativeWrapper {
     }
 
     fun getKerning(left: Char, right: Char, mode: FT_Kerning_Mode): Kerning? {
-        return FreeType.FT_Face_Get_Kerning(pointer, left, right, mode.ordinal)
+        val ptr = FreeType.FT_Face_Get_Kerning(pointer, left, right, mode.ordinal)
+        return if (ptr == 0L) null else Vector(ptr).let { Kerning(it.x, it.y) }
     }
 
     fun setPixelSizes(width: Float, height: Float): Boolean {

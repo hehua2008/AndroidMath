@@ -66,7 +66,7 @@ object FreeType {
 
     external fun FT_Get_Track_Kerning(face: Long, point_size: Long, degree: Int): Long
 
-    external fun FT_Face_Get_Kerning(face: Long, left: Char, right: Char, mode: Int): Kerning?
+    external fun FT_Face_Get_Kerning(face: Long, left: Char, right: Char, mode: Int): Long
 
     external fun FT_Done_Face(face: Long): Boolean
 
@@ -142,7 +142,7 @@ object FreeType {
 
     external fun FT_GlyphSlot_Get_linearVertAdvance(glyphSlot: Long): Long
 
-    external fun FT_GlyphSlot_Get_advance(glyphSlot: Long): GlyphSlot.Advance?
+    external fun FT_GlyphSlot_Get_advance(glyphSlot: Long): Long
 
     external fun FT_GlyphSlot_Get_format(glyphSlot: Long): Int
 
@@ -192,6 +192,11 @@ object FreeType {
 
     // ---- Charmap
     external fun FT_Get_Charmap_Index(charmap: Long): Int
+
+    // ---- Vector
+    external fun FT_Vector_Get_x(vector: Long): Int
+
+    external fun FT_Vector_Get_y(vector: Long): Int
 
     // ---- Glyph
     // TODO

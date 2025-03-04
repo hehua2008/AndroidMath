@@ -150,9 +150,7 @@ class MTFontMathTable(val font: MTFont, var istreamotf: InputStream?) {
             if (!freeface.loadGlyph(glyphs[i], FT_LOAD_NO_SCALE)) {
                 val gslot = freeface.glyphSlot!!
                 val a = gslot.advance
-                if (a != null) {
-                    advances[i] = fontUnitsToPt(a.x)
-                }
+                advances[i] = fontUnitsToPt(a.x)
             }
         }
     }

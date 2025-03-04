@@ -16,8 +16,8 @@ class GlyphSlot(pointer: Long) : NativeWrapper(pointer) {
     val linearVertAdvance: Long
         get() = FreeType.FT_GlyphSlot_Get_linearVertAdvance(pointer)
 
-    val advance: Advance?
-        get() = FreeType.FT_GlyphSlot_Get_advance(pointer)
+    val advance: Vector
+        get() = Vector(FreeType.FT_GlyphSlot_Get_advance(pointer))
 
     val format: Int
         get() = FreeType.FT_GlyphSlot_Get_format(pointer)
@@ -37,11 +37,5 @@ class GlyphSlot(pointer: Long) : NativeWrapper(pointer) {
 
     fun renderGlyph(renderMode: FT_Render_Mode): Boolean {
         return FreeType.FT_Render_Glyph(pointer, renderMode.ordinal)
-    }
-
-    class Advance(val x: Long, val y: Long) {
-        override fun toString(): String {
-            return "($x,$y)"
-        }
     }
 }

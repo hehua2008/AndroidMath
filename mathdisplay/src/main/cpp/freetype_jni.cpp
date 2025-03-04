@@ -320,15 +320,10 @@ Java_com_pvporbit_freetype_FreeType_FT_1GlyphSlot_1Get_1linearVertAdvance(JNIEnv
     return ((FT_GlyphSlot) glyph)->linearVertAdvance;
 }
 
-JNIEXPORT jobject JNICALL
+JNIEXPORT jlong JNICALL
 Java_com_pvporbit_freetype_FreeType_FT_1GlyphSlot_1Get_1advance(JNIEnv *env, jclass obj,
                                                                 jlong glyph) {
-    FT_Vector vector = ((FT_GlyphSlot) glyph)->advance;
-
-    jclass cls = env->FindClass("com/pvporbit/freetype/GlyphSlot$Advance");
-    jmethodID methodID = env->GetMethodID(cls, "<init>", "(JJ)V");
-    jobject a = env->NewObject(cls, methodID, (jlong) vector.x, (jlong) vector.y);
-    return a;
+    return (jlong) &((FT_GlyphSlot) glyph)->advance;
 }
 
 JNIEXPORT jint JNICALL
@@ -684,21 +679,25 @@ Java_com_pvporbit_freetype_FreeType_FT_1Get_1FSType_1Flags(JNIEnv *env, jclass o
     return FT_Get_FSType_Flags((FT_Face) face);
 }
 
-JNIEXPORT jobject JNICALL
+JNIEXPORT jlong JNICALL
 Java_com_pvporbit_freetype_FreeType_FT_1Face_1Get_1Kerning(JNIEnv *env, jclass obj, jlong face,
                                                            jchar left, jchar right, jint mode) {
     FT_Vector vector;
-    int x = 0;
-    int y = 0;
     if (!FT_Get_Kerning((FT_Face) face, left, right, mode, &vector)) {
-        x = vector.x;
-        y = vector.y;
+        return (jlong) &vector;
+    } else {
+        return 0;
     }
+}
 
-    jclass cls = env->FindClass("com/pvporbit/freetype/Kerning");
-    jmethodID methodID = env->GetMethodID(cls, "<init>", "(II)V");
-    jobject a = env->NewObject(cls, methodID, x, y);
-    return a;
+JNIEXPORT jint JNICALL
+Java_com_pvporbit_freetype_FreeType_FT_1Vector_1Get_1x(JNIEnv *env, jclass obj, jlong vector) {
+    return (jint) ((FT_Vector *) vector)->x;
+}
+
+JNIEXPORT jint JNICALL
+Java_com_pvporbit_freetype_FreeType_FT_1Vector_1Get_1y(JNIEnv *env, jclass obj, jlong vector) {
+    return (jint) ((FT_Vector *) vector)->y;
 }
 
 #ifdef __cplusplus
